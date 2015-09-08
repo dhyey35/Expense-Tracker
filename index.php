@@ -5,4 +5,6 @@ require_once('expense.php');
 print "<hr>";
 require_once('income.php');
 print "<hr>";
+require_once('creditors.php');
+print "<hr>";
 ?>
