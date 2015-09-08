@@ -1,25 +1,28 @@
 <?php
 require_once('login_verifier.php');
+
 if(isset($_POST['expense_submit'])) {
 	require_once('secure.php');
 	$expense_name=Secure($_POST['expense_name']);
 	$expense_amt=Secure($_POST['expense_amt']);
-	/* no regex checking as user may want to enter anything to remember */
-	if(empty($expense_name) or empty($expense_amt) or strlen($expense_name)>30 or strlen($expense_amt)>11) {
-		die("Please enter proper expense name and amount");
-	}
-	require_once('db.php');
-	$dbc=mysqli_connect(DOMAIN,USER,PASS,DB);
-	if(!empty($expense_name) and !empty($expense_amt)) {
+	
+	
+	if(!empty($expense_name) and !empty($expense_amt) and strlen($expense_name)<30 and strlen($expense_amt)<11 and preg_match('/^\w*$/',$expense_name) and preg_match('/^[0-9]*$/',$expense_amt)) {
 		$date=getdate();
 		$date=$date['mday'].'-'.$date['mon'].'-'.$date['year'];
 		
+		require_once('db.php');
+		$dbc=mysqli_connect(DOMAIN,USER,PASS,DB);
+
 		$exp_query=$dbc->prepare("INSERT INTO expense (user_id,expense_name,expense_amt,expense_date) VALUES(?,?,?,?)");
 		$exp_query->bind_param('ssss',$_SESSION['id'],$expense_name,$expense_amt,$date);
 		$exp_query->execute();
 		
-		print('Added '.$expense_name.' '. $expense_amt);
+		print("Added $expense_name $expense_amt");
 		mysqli_close($dbc);
+	}
+	else {
+		print("Please enter name and amount properly ");
 	}
 }
 ?>
