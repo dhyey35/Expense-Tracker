@@ -6,10 +6,10 @@
 	<body style="text-align:center;">
 		<h2> Sign up - Expense Tracker </h2>
 		<form method="post">
-			<input type="text" name="username" placeholder="Name" value=<?php if(isset($_POST['username'])) print htmlentities($_POST['username'],ENT_QUOTES,'utf-8'); ?> />
+			<input type="text" name="username" placeholder="Name" value="<?php if(isset($_POST['username'])) print htmlentities($_POST['username'],ENT_QUOTES,'utf-8'); ?>" />
 			<br>
 			<br>
-			<input type="email" name="email" placeholder="E-mail" value=<?php if(isset($_POST['email'])) print htmlentities($_POST['email'],ENT_QUOTES,'utf-8'); ?> />
+			<input type="email" name="email" placeholder="E-mail" value="<?php if(isset($_POST['email'])) print htmlentities($_POST['email'],ENT_QUOTES,'utf-8'); ?>" />
 			<br>
 			<br>
 			<input type="password" name="password" placeholder="Password">
@@ -32,7 +32,7 @@ if(isset($_POST['submit'])) {
 	$password=Secure($_POST['password']);
 	$confirm_password=Secure($_POST['confirm_password']);
 	
-	/* validation username max 40 chars email max 60 chars password min 8 chars max 300 chars to prevent buffer overflow*/
+	/* validation username max 40 chars email max 254 chars password min 8 chars max 300 chars to prevent buffer overflow*/
 	if(strlen($username)<1 or strlen($username)>40) {
 		die("Please enter username within 40 characters");
 	}

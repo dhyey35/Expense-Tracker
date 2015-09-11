@@ -25,13 +25,16 @@ if(isset($_SESSION['id']) and isset($_SESSION['username']) and isset($_SESSION['
 
 
 <?php
-//require_once('auto_login.php');
+require_once('auto_login.php');
 
 if(isset($_POST['submit'])) {
 	require_once('secure.php');
 	$email=Secure($_POST['email']);
 	$password=Secure($_POST['password']);
 	
+	if(strlen($email)<4 or strlen($password)<8) {
+		die("Please enter proper password and email");
+	}
 	/* use email address as salt than count the no of  chars and than add them at back of string and than hash 20,000 times */
 	$password.=$email;
 	$password.=strlen($password);
@@ -46,7 +49,8 @@ if(isset($_POST['submit'])) {
 	$query3->bind_param('ss',$email,$password);
 	$query3->execute();
 	$query3->bind_result($query_user_id,$query_username,$query_email) or die("Error bind result 2");
-	$query3->fetch();
+	
+	if($query3->fetch()==1) {
 	session_start();
 	$_SESSION['id']=$query_user_id;
 	$_SESSION['username']=$query_username;
@@ -59,5 +63,9 @@ if(isset($_POST['submit'])) {
 	print "<strong>Log In SUCCESSFUL</strong>";
 	//change
 	header('Location: http://localhost/expense/index.php');
+	}
+	else {
+		die("Please enter correct email and password");
+	}
 }
 ?>
