@@ -10,7 +10,7 @@ if(isset($_POST['expense_submit'])) {
 	$expense_amt=Secure($_POST['expense_amt']);
 	
 	
-	if(!empty($expense_name) and !empty($expense_amt) and strlen($expense_name)<30 and strlen($expense_amt)<11 and preg_match('/^\w*$/',$expense_name) and preg_match('/^[0-9]*$/',$expense_amt)) {
+	if(!empty($expense_name) and !empty($expense_amt) and strlen($expense_name)<30 and strlen($expense_amt)<11 and preg_match('/^[A-Za-z0-9\.\-\s]*$/',$expense_name) and preg_match('/^[0-9]*$/',$expense_amt)) {
 
 		$date=getdate();
 		$date=$date['mday'].'-'.$date['mon'].'-'.$date['year'];

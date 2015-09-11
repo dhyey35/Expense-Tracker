@@ -9,7 +9,7 @@ if(isset($_POST['income_submit'])) {
 	$income_name=Secure($_POST['income_name']);
 	$income_amt=Secure($_POST['income_amt']);
 	
-	if(!empty($income_name) and !empty($income_amt) and strlen($income_name)<30 and strlen($income_amt)<11 and preg_match('/^\w*$/',$income_name) and preg_match('/^[0-9]*$/',$income_amt)) {
+	if(!empty($income_name) and !empty($income_amt) and strlen($income_name)<30 and strlen($income_amt)<11 and preg_match('/^[A-Za-z0-9\.\-\s]*$/',$income_name) and preg_match('/^[0-9]*$/',$income_amt)) {
 		
 		$date=getdate();
 		$date=$date['mday'].'-'.$date['mon'].'-'.$date['year'];

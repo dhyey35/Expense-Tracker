@@ -1,4 +1,5 @@
 <?php
+//add a paid/delete button
 require_once('login_verifier.php');
 require_once('db.php');
 $dbc=mysqli_connect(DOMAIN,USER,PASS,DB);
@@ -10,7 +11,7 @@ if(isset($_POST['creditors_submit'])) {
 	$creditors_amt=Secure($_POST['creditors_amt']);
 
 	if(!empty($creditors_name) and !empty($creditors_amt) and strlen($creditors_name)<30 and strlen($creditors_amt)<11 
-		and preg_match('/^\w*$/',$creditors_name) and preg_match('/^[0-9]*$/',$creditors_amt)) {
+		and preg_match('/^[A-Za-z0-9\.\-\s]*$/',$creditors_name) and preg_match('/^[0-9]*$/',$creditors_amt)) {
 
 		$date=getdate();
 		$date=$date['mday'].'-'.$date['mon'].'-'.$date['year'];
@@ -40,10 +41,11 @@ if(isset($_POST['creditors_submit'])) {
 	</form>
 	<?php
 	/* all creditors to be displayed */
-	$creditors_query2="SELECT creditors_name,creditors_amt FROM creditors WHERE user_id=".$_SESSION['id'];
+	$creditors_query2="SELECT creditors_id,creditors_name,creditors_amt FROM creditors WHERE user_id=".$_SESSION['id'];
 	$creditors_data=mysqli_query($dbc,$creditors_query2);
 	while($creditors_row=mysqli_fetch_array($creditors_data)) {
-		print $creditors_row['creditors_name']." ".$creditors_row['creditors_amt']."<br>";
+		print $creditors_row['creditors_name']." ".$creditors_row['creditors_amt']." "."<a href=delete.php?creditors_id=".
+		$creditors_row['creditors_id']."&user_id=".$_SESSION['id']." >Paid</a>"."<br>";
 	}
 	mysqli_close($dbc);
 	?>
