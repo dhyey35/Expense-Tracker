@@ -58,6 +58,6 @@ if(isset($_POST['submit'])) {
 	
 	print "<strong>Log In SUCCESSFUL</strong>";
 	//change
-	header('Location: http://localhost/expense/index.php');
+	header('Location: http://expense.coolpage.biz/index.php');
 }
 ?>

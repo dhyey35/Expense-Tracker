@@ -1,5 +1,5 @@
 <?php
-//add a paid/delete button
+
 //add comments
 // after deleting add them to a file
 require_once('expense.php');
