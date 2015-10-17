@@ -50,6 +50,7 @@ if(isset($_POST['income_submit'])) {
 	while($income_row=mysqli_fetch_array($income_data)) {
 		print $income_row['income_name']." ".$income_row['income_amt']."<br>";
 	}
+	print "<a href=all.php/#income_table >View all incomes</a>";
 	mysqli_close($dbc);
 	?>
 </details>

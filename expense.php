@@ -3,7 +3,7 @@ require_once('login_verifier.php');
 require_once('db.php');
 $dbc=mysqli_connect(DOMAIN,USER,PASS,DB);
 date_default_timezone_set('Asia/Calcutta');
-
+/* adding the expense into database */
 if(isset($_POST['expense_submit'])) {
 	require_once('secure.php');
 	$expense_name=Secure($_POST['expense_name']);
@@ -50,9 +50,11 @@ if(isset($_POST['expense_submit'])) {
 
 	$exp_query2="SELECT expense_name , expense_amt FROM expense WHERE user_id=".$_SESSION['id']." AND expense_date LIKE '%$date' ";
 	$exp_data=mysqli_query($dbc,$exp_query2);
+	/* printing exp of this month */
 	while($exp_rows=mysqli_fetch_array($exp_data)) {
 		print $exp_rows['expense_name']." ".$exp_rows['expense_amt']."<br>";
 	}
+	print "<a href=all.php/#expense_table >View all expenses</a>";
 	mysqli_close($dbc);
 	?>
 </details>

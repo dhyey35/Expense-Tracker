@@ -47,6 +47,7 @@ if(isset($_POST['creditors_submit'])) {
 		print $creditors_row['creditors_name']." ".$creditors_row['creditors_amt']." "."<a href=delete.php?creditors_id=".
 		$creditors_row['creditors_id']."&user_id=".$_SESSION['id']." >Paid</a>"."<br>";
 	}
+	print "<a href=all.php/#creditors_table>View all creditors</a>";
 	mysqli_close($dbc);
 	?>
 </details>
