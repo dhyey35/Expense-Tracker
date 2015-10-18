@@ -3,10 +3,11 @@
 require_once('login_verifier.php');
 require_once('db.php');
 $dbc=mysqli_connect(DOMAIN,USER,PASS,DB);
+require_once('secure.php');
 date_default_timezone_set('Asia/Calcutta');
 
 if(isset($_POST['creditors_submit'])) {
-	require_once('secure.php');
+	
 	$creditors_name=Secure($_POST['creditors_name']);
 	$creditors_amt=Secure($_POST['creditors_amt']);
 
@@ -27,6 +28,45 @@ if(isset($_POST['creditors_submit'])) {
 		print("Please enter proper creditors name and amount");
 	}
 }
+/* Deleting creditors */
+
+if(isset($_GET['creditors_id']) and isset($_GET['user_id'])) {
+	
+	$creditors_id=Secure($_GET['creditors_id']);
+	$user_id=Secure($_GET['user_id']);
+	/* ensuring that the user delets only his creditors */
+	if($_SESSION['id']==$_GET['user_id']) {
+		/* writing them to file before deleting */
+		$save_creditors=$dbc->prepare("SELECT * FROM creditors WHERE user_id=? AND creditors_id=?");
+		$save_creditors->bind_param('ss',$user_id,$creditors_id);
+		$save_creditors->execute();
+		$result=$save_creditors->get_result();
+		$row=mysqli_fetch_array($result);
+		if(empty($row)) {
+			print("Creditors do not exist !! ");
+			header("Location: http://localhost/expense/index.php");//change
+			die();
+		}
+		/* saving data to csv file*/
+		if(file_exists("deleted.csv")) {
+			$creditors_content="creditor,".$row['user_id'].",".$row['creditors_name'].",".$row['creditors_amt'];
+			file_put_contents("deleted.csv",$creditors_content."\n",FILE_APPEND);
+		} 
+		else {
+			print "Error while deleting creditors .";
+		}
+
+		$paid_query=$dbc->prepare("DELETE FROM creditors WHERE user_id=? AND creditors_id=?");
+		$paid_query->bind_param('ss',$user_id,$creditors_id);
+		$paid_query->execute();
+
+		print ("Deleted");
+	}
+	else {
+		print ("Please only delete your creditors");
+	}
+}
+
 ?>
 <details>
 	<summary>
@@ -44,7 +84,7 @@ if(isset($_POST['creditors_submit'])) {
 	$creditors_query2="SELECT creditors_id,creditors_name,creditors_amt FROM creditors WHERE user_id=".$_SESSION['id'];
 	$creditors_data=mysqli_query($dbc,$creditors_query2);
 	while($creditors_row=mysqli_fetch_array($creditors_data)) {
-		print $creditors_row['creditors_name']." ".$creditors_row['creditors_amt']." "."<a href=delete.php?creditors_id=".
+		print $creditors_row['creditors_name']." ".$creditors_row['creditors_amt']." "."<a href=index.php?creditors_id=".
 		$creditors_row['creditors_id']."&user_id=".$_SESSION['id']." >Paid</a>"."<br>";
 	}
 	print "<a href=all.php/#creditors_table>View all creditors</a>";
