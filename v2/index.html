@@ -1,6 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Expense Tracker</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<style type="text/css">
+			#title{
+				color: #2e8ae6;
+			}
+			#v{
+				margin-left: 0.5em;
+				color: #d3d3d3;
+				font-size:0.7em;
+				margin: 0 auto;
+			}
+			#username{
+				color: gray;
+			}
+		</style>
 	</head>
+	<body>
+		<div class="contianer-fluid">
+			<div class="row">
+				<h2 class="col-md-10" id="title">Expense Tracker</h2>
+				<h3 class="col-md-2" id="username"><span id="displayName">username</span>
+					<span id="v"> &#9660;<h3>
+			</div>
+			<hr style="color:#2e8ae6;" />
+			<p id="message"></p>
+			<details>
+				<summary>
+					<big>Expense</big>
+				</summary>
+				<form id="expense" method="post">
+					<input type="text" name="expense_name" placeholder="Expense Name">
+					<input type="text" name="expense_amt" placeholder="Expense Amount">
+					<br>
+					<br>
+					<input type="submit" id="expense_submit" name="expense_submit" value="Add">
+				</form>
+			</details>
+			
+		</div>
+
+		<script type="text/javascript">
+			//ajax for welcome username
+			//ajax for total of this month for all
+			//ajax for adding amount for all
+			//ajax for showing all when clicked on All
+			//internal link for exp,income... in show all
+			//store data in html5 localstorage
+		$(document).ready(function(){
+
+			$("#expense").submit(function(){
+				return false;
+			});
+
+			$("#expense_submit").click(function(){
+				var exp_data = $("#expense :input").serializeArray();
+				console.log(exp_data);
+				$.post('backend.php',exp_data,function(data){
+					$("#message").html(data).fadeOut(1000);
+				}).fail(function(data){
+					$("#message").html(data);
+				});
+			});
+
+		});
+		</script>
+	</body>
 </html>
