@@ -22,9 +22,38 @@
 			}
 			#username{
 				color: gray;
+				cursor:pointer;
 			}
 			hr{
+				border-top:1px solid #eee;
+			}
+			summary big{
 				color: #2e8ae6;
+				font-weight: bold;
+
+			}
+			details{
+				cursor: pointer;
+			}
+			summary{
+				outline:none;
+			}
+			details div{
+				margin-top: 0.5em;
+			}
+			[id$=submit]{
+				color:gray;
+				border:2px solid gray;
+				background: white;
+				border-radius: 5px;
+				outline:none;
+			}
+			[id$=submit]:hover{
+				color: white;
+				background: gray;
+			}
+			input[id$=amt]{
+				margin-top:0.5em;
 			}
 		</style>
 	</head>
@@ -48,20 +77,20 @@
 					<input type="text" id="expense_amt" name="expense_amt" placeholder="Expense Amount">
 					<br>
 					<br>
-					<input type="button" id="expense_submit" name="expense_submit" value="Add">
+					<input type="submit" id="expense_submit" name="expense_submit" value="Add">
 					<div id="exp_total">Total This Month: <span id="exp_total_amt"></span></div>
 				</div>
 			</details>
 
 			<hr/>
 
-			<details>
+			<details id="income_details">
 				<summary>
 					<big>Income</big>
 				</summary>
 				<div id="income">
-					<input type="text" id="income_name" name="income_name" placeholder="income Name">
-					<input type="text" id="income_amt" name="income_amt" placeholder="income Amount">
+					<input type="text" id="income_name" name="income_name" placeholder="Income Name">
+					<input type="text" id="income_amt" name="income_amt" placeholder="Income Amount">
 					<br>
 					<br>
 					<input type="submit" id="income_submit" name="income_submit" value="Add">
@@ -71,13 +100,13 @@
 
 			<hr>
 
-			<details>
+			<details id="creditors_details">
 				<summary>
 					<big>Creditors</big>
 				</summary>
 				<div id="creditors">
-					<input type="text" id="creditors_name" name="creditors_name" placeholder="creditors Name">
-					<input type="text" id="creditors_amt" name="creditors_amt" placeholder="creditors Amount">
+					<input type="text" id="creditors_name" name="creditors_name" placeholder="Creditors Name">
+					<input type="text" id="creditors_amt" name="creditors_amt" placeholder="Creditors Amount">
 					<br>
 					<br>
 					<input type="submit" id="creditors_submit" name="creditors_submit" value="Add">
@@ -87,13 +116,13 @@
 
 			<hr>
 
-			<details>
+			<details id="debtors_details">
 				<summary>
 					<big>Debtors</big>
 				</summary>
 				<div id="debtors">
-					<input type="text" id="debtors_name" name="debtors_name" placeholder="debtors Name">
-					<input type="text" id="debtors_amt" name="debtors_amt" placeholder="debtors Amount">
+					<input type="text" id="debtors_name" name="debtors_name" placeholder="Debtors Name">
+					<input type="text" id="debtors_amt" name="debtors_amt" placeholder="Debtors Amount">
 					<br>
 					<br>
 					<input type="submit" id="debtors_submit" name="debtors_submit" value="Add">
@@ -103,10 +132,10 @@
 		</div>
 
 		<script type="text/javascript">
-			//ajax for welcome username
+
 			//ajax for showing all when clicked on All
 			//internal link for exp,income... in show all
-			//enter key on amt field submits 
+			//login and signup page
 			//validation
 			//deletion of cred and deb
 			
@@ -132,7 +161,33 @@
 			//calling above func
 			showTotal();
 
-			
+			function clearFields(){
+				$("input[type=text]").val(" ");
+			}
+
+			$("input[id$=amt]").keypress(function(key){
+				if(key.keyCode == 13){
+					$(this).next().next().next().trigger("click");
+				}
+			})
+			//closing detaqils tag by clicking anywhere on div
+			/*$("#expense").click(function(){
+				var exp_details = document.getElementById("exp_details");
+				exp_details.removeAttribute("open");
+			});
+			$("#income").click(function(){
+				var income_details = document.getElementById("income_details");
+				income_details.removeAttribute("open");
+			});
+			$("#creditors").click(function(){
+				var creditors_details = document.getElementById("creditors_details");
+				creditors_details.removeAttribute("open");
+			});
+			$("#debtors").click(function(){
+				var debtors_details = document.getElementById("debtors_details");
+				debtors_details.removeAttribute("open");
+			});*/
+
 			//ajax call when user presses button
 			$("#expense_submit").click(function(){
 				var exp_data = $("#expense :input").serializeArray();
@@ -149,7 +204,7 @@
 			$("#debtors_submit").click(function(){
 				var debtors_data = $("#debtors :input").serializeArray();
 				addData(debtors_data);
-			})
+			});
 
 			//single func for all ajax calls to submit data
 			function addData(dataToAdd){
@@ -160,6 +215,7 @@
 						success:function(data){
 							$("#message").html(data);
 							showTotal();
+							clearFields();
 						},
 						error: function(XMLHttpRequest){
 							console.log("error");
