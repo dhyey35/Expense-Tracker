@@ -54,6 +54,15 @@
 			//internal link for exp,income... in show all
 			
 		$(document).ready(function(){
+			/* retriving total of exp,inc..*/
+			$.ajax({
+				url:'total.php',
+				type:'post',
+				success:function(data){
+					data = data.split("=");
+					$("#exp_total_amt").html(data[0]);
+				}
+			});
 			
 			$("#expense").submit(function(){
 				return false;
