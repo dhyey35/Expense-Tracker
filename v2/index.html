@@ -6,7 +6,11 @@
 		<title>Expense Tracker</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+		<script src="cookie.js"></script>
 		<style type="text/css">
+			#holder{
+				margin-left: 1em;
+			}
 			#title{
 				color: #2e8ae6;
 			}
@@ -19,64 +23,143 @@
 			#username{
 				color: gray;
 			}
+			hr{
+				color: #2e8ae6;
+			}
 		</style>
 	</head>
 	<body>
-		<div class="contianer-fluid">
+		<div id="holder" class="contianer-fluid">
 			<div class="row">
 				<h2 class="col-md-10" id="title">Expense Tracker</h2>
 				<h3 class="col-md-2" id="username"><span id="displayName">username</span>
 					<span id="v"> &#9660;<h3>
 			</div>
-			<hr style="color:#2e8ae6;" />
+
+			<hr />
+
 			<p id="message"></p>
-			<details>
+			<details id="exp_details" open>
 				<summary>
 					<big>Expense</big>
 				</summary>
-				<form id="expense" method="post">
+				<div id="expense" > 
 					<input type="text" id="expense_name" name="expense_name" placeholder="Expense Name">
 					<input type="text" id="expense_amt" name="expense_amt" placeholder="Expense Amount">
 					<br>
 					<br>
-					<input type="submit" id="expense_submit" name="expense_submit" value="Add">
+					<input type="button" id="expense_submit" name="expense_submit" value="Add">
 					<div id="exp_total">Total This Month: <span id="exp_total_amt"></span></div>
-				</form>
+				</div>
 			</details>
-			
+
+			<hr/>
+
+			<details>
+				<summary>
+					<big>Income</big>
+				</summary>
+				<div id="income">
+					<input type="text" id="income_name" name="income_name" placeholder="income Name">
+					<input type="text" id="income_amt" name="income_amt" placeholder="income Amount">
+					<br>
+					<br>
+					<input type="submit" id="income_submit" name="income_submit" value="Add">
+					<div id="income_total">Total This Month: <span id="income_total_amt"></span></div>
+				</div>
+			</details>
+
+			<hr>
+
+			<details>
+				<summary>
+					<big>Creditors</big>
+				</summary>
+				<div id="creditors">
+					<input type="text" id="creditors_name" name="creditors_name" placeholder="creditors Name">
+					<input type="text" id="creditors_amt" name="creditors_amt" placeholder="creditors Amount">
+					<br>
+					<br>
+					<input type="submit" id="creditors_submit" name="creditors_submit" value="Add">
+					<div id="creditors_total">Total This Month: <span id="creditors_total_amt"></span></div>
+				</div>
+			</details>
+
+			<hr>
+
+			<details>
+				<summary>
+					<big>Debtors</big>
+				</summary>
+				<div id="debtors">
+					<input type="text" id="debtors_name" name="debtors_name" placeholder="debtors Name">
+					<input type="text" id="debtors_amt" name="debtors_amt" placeholder="debtors Amount">
+					<br>
+					<br>
+					<input type="submit" id="debtors_submit" name="debtors_submit" value="Add">
+					<div id="debtors_total">Total This Month: <span id="debtors_total_amt"></span></div>
+				</div>
+			</details>
 		</div>
 
 		<script type="text/javascript">
 			//ajax for welcome username
-			//ajax for total of this month for all
-			//ajax for adding amount for all
 			//ajax for showing all when clicked on All
 			//internal link for exp,income... in show all
+			//enter key on amt field submits 
+			//validation
+			//deletion of cred and deb
 			
 		$(document).ready(function(){
+			//displaying username
+			$("#displayName").html(Cookies.get("username"));
+
 			/* retriving total of exp,inc..*/
+			function showTotal(){
 			$.ajax({
 				url:'total.php',
 				type:'post',
 				success:function(data){
 					data = data.split("=");
 					$("#exp_total_amt").html(data[0]);
+					$("#income_total_amt").html(data[1]);
+					$("#creditors_total_amt").html(data[2]);
+					$("#debtors_total_amt").html(data[3]);
 				}
 			});
+			}
 			
-			$("#expense").submit(function(){
-				return false;
-			});
+			//calling above func
+			showTotal();
 
+			
+			//ajax call when user presses button
 			$("#expense_submit").click(function(){
 				var exp_data = $("#expense :input").serializeArray();
-				
-					$.ajax({
+				addData(exp_data);
+			});
+			$("#income_submit").click(function(){
+				var income_data = $("#income :input").serializeArray();
+				addData(income_data);
+			});
+			$("#creditors_submit").click(function(){
+				var creditors_data = $("#creditors :input").serializeArray();
+				addData(creditors_data);
+			});
+			$("#debtors_submit").click(function(){
+				var debtors_data = $("#debtors :input").serializeArray();
+				addData(debtors_data);
+			})
+
+			//single func for all ajax calls to submit data
+			function addData(dataToAdd){
+			$.ajax({
 						type:'post',
 						url:'backend.php',
-						data:exp_data,
+						data:dataToAdd,
 						success:function(data){
-							$("#message").html(data).fadeOut(1000);
+							$("#message").html(data);
+							showTotal();
 						},
 						error: function(XMLHttpRequest){
 							console.log("error");
@@ -89,8 +172,7 @@
 							
 						}
 					})
-			});
-
+			}
 		});
 		</script>
 	</body>

@@ -25,13 +25,6 @@ if(!$income_total[0]){
 	$income_total[0] = "0";	
 }
 
-$debtors_query = "SELECT sum(debtors_amt) FROM debtors WHERE user_id=$id AND debtors_date LIKE '%$date'";
-$debtors_data = mysqli_query($dbc,$debtors_query) or die("Error debtor");
-$debtors_total = mysqli_fetch_array($debtors_data);
-if(!$debtors_total[0]){
-	$debtors_total[0] = "0";	
-}
-
 $creditors_query = "SELECT sum(creditors_amt) FROM creditors WHERE user_id=$id AND creditors_date LIKE '%$date'";
 $creditors_data = mysqli_query($dbc,$creditors_query) or die("Error creditors");
 $creditors_total = mysqli_fetch_array($creditors_data);
@@ -39,6 +32,13 @@ if(!$creditors_total[0]){
 	$creditors_total[0] = "0";	
 }
 
-$data = $exp_total[0]."=".$income_total[0]."=".$debtors_total[0]."=".$creditors_total[0];
+$debtors_query = "SELECT sum(debtors_amt) FROM debtors WHERE user_id=$id AND debtors_date LIKE '%$date'";
+$debtors_data = mysqli_query($dbc,$debtors_query) or die("Error debtor");
+$debtors_total = mysqli_fetch_array($debtors_data);
+if(!$debtors_total[0]){
+	$debtors_total[0] = "0";	
+}
+
+$data = $exp_total[0]."=".$income_total[0]."=".$creditors_total[0]."=".$debtors_total[0];
 die($data);
 ?>
