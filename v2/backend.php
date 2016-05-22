@@ -37,6 +37,5 @@ function fail($where,$message){
 }
 function success($message){
 	die($message);
-	//die(json_encode(array("status" => "success","message" => $message)));
 }
 ?>

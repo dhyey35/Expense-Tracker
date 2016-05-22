@@ -35,11 +35,12 @@
 					<big>Expense</big>
 				</summary>
 				<form id="expense" method="post">
-					<input type="text" name="expense_name" placeholder="Expense Name">
-					<input type="text" name="expense_amt" placeholder="Expense Amount">
+					<input type="text" id="expense_name" name="expense_name" placeholder="Expense Name">
+					<input type="text" id="expense_amt" name="expense_amt" placeholder="Expense Amount">
 					<br>
 					<br>
 					<input type="submit" id="expense_submit" name="expense_submit" value="Add">
+					<div id="exp_total">Total This Month: <span id="exp_total_amt"></span></div>
 				</form>
 			</details>
 			
@@ -51,21 +52,34 @@
 			//ajax for adding amount for all
 			//ajax for showing all when clicked on All
 			//internal link for exp,income... in show all
-			//store data in html5 localstorage
+			
 		$(document).ready(function(){
-
+			
 			$("#expense").submit(function(){
 				return false;
 			});
 
 			$("#expense_submit").click(function(){
 				var exp_data = $("#expense :input").serializeArray();
-				console.log(exp_data);
-				$.post('backend.php',exp_data,function(data){
-					$("#message").html(data).fadeOut(1000);
-				}).fail(function(data){
-					$("#message").html(data);
-				});
+				
+					$.ajax({
+						type:'post',
+						url:'backend.php',
+						data:exp_data,
+						success:function(data){
+							$("#message").html(data).fadeOut(1000);
+						},
+						error: function(XMLHttpRequest){
+							console.log("error");
+							$("#message").html("Internet Error");
+							if(XMLHttpRequest.readyState == 0){
+								$("#message").html("Please check internet Connection !!");
+							}else{
+								$("#message").html("Error Occured !!");
+							}
+							
+						}
+					})
 			});
 
 		});
