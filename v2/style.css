@@ -1,0 +1,54 @@
+	#holder{
+		margin-left: 1em;
+	}
+	#title{
+		color: #2e8ae6;
+	}
+	#v{
+		margin-left: 0.5em;
+		color: #d3d3d3;
+		font-size:0.7em;
+		margin: 0 auto;
+	}
+	#username{
+		color: gray;
+		cursor:pointer;
+	}
+	hr{
+		border-top:1px solid #eee;
+	}
+	summary big{
+		color: #2e8ae6;
+		font-weight: bold;
+
+	}
+	details{
+		cursor: pointer;
+	}
+	summary{
+		outline:none;
+	}
+	details div{
+		margin-top: 0.5em;
+	}
+	[id$=submit]{
+		color:gray;
+		border:2px solid gray;
+		background: white;
+		border-radius: 5px;
+		outline:none;
+	}
+	[id$=submit]:hover{
+		color: white;
+		background: gray;
+	}
+	input[id$=amt]{
+		margin-top:0.5em;
+	}
+	table{
+		border: 1px solid gray;
+		max-width: 25em !important;
+	}
+	table caption{
+		font-size: 1.5em;
+	}

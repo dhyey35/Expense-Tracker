@@ -5,57 +5,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>Expense Tracker</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="style.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script src="cookie.js"></script>
-		<style type="text/css">
-			#holder{
-				margin-left: 1em;
-			}
-			#title{
-				color: #2e8ae6;
-			}
-			#v{
-				margin-left: 0.5em;
-				color: #d3d3d3;
-				font-size:0.7em;
-				margin: 0 auto;
-			}
-			#username{
-				color: gray;
-				cursor:pointer;
-			}
-			hr{
-				border-top:1px solid #eee;
-			}
-			summary big{
-				color: #2e8ae6;
-				font-weight: bold;
 
-			}
-			details{
-				cursor: pointer;
-			}
-			summary{
-				outline:none;
-			}
-			details div{
-				margin-top: 0.5em;
-			}
-			[id$=submit]{
-				color:gray;
-				border:2px solid gray;
-				background: white;
-				border-radius: 5px;
-				outline:none;
-			}
-			[id$=submit]:hover{
-				color: white;
-				background: gray;
-			}
-			input[id$=amt]{
-				margin-top:0.5em;
-			}
-		</style>
 	</head>
 	<body>
 		<div id="holder" class="contianer-fluid">
@@ -95,6 +48,7 @@
 					<br>
 					<input type="submit" id="income_submit" name="income_submit" value="Add">
 					<div id="income_total">Total This Month: <span id="income_total_amt"></span></div>
+					<!-- <a href="view_all.php?" -->
 				</div>
 			</details>
 
@@ -132,11 +86,10 @@
 		</div>
 
 		<script type="text/javascript">
-
-			//ajax for showing all when clicked on All
+			//To-Do
+			//new for showing all when clicked on All
 			//internal link for exp,income... in show all
 			//login and signup page
-			//validation
 			//deletion of cred and deb
 			
 		$(document).ready(function(){
@@ -169,25 +122,13 @@
 				if(key.keyCode == 13){
 					$(this).next().next().next().trigger("click");
 				}
-			})
-			//closing detaqils tag by clicking anywhere on div
-			/*$("#expense").click(function(){
-				var exp_details = document.getElementById("exp_details");
-				exp_details.removeAttribute("open");
 			});
-			$("#income").click(function(){
-				var income_details = document.getElementById("income_details");
-				income_details.removeAttribute("open");
-			});
-			$("#creditors").click(function(){
-				var creditors_details = document.getElementById("creditors_details");
-				creditors_details.removeAttribute("open");
-			});
-			$("#debtors").click(function(){
-				var debtors_details = document.getElementById("debtors_details");
-				debtors_details.removeAttribute("open");
-			});*/
 
+			//closes all other details tag except the one that is clicked
+			$('details').click(function (event) {
+			    $('details').not(this).removeAttr("open");  
+			});
+			
 			//ajax call when user presses button
 			$("#expense_submit").click(function(){
 				var exp_data = $("#expense :input").serializeArray();
@@ -208,6 +149,16 @@
 
 			//single func for all ajax calls to submit data
 			function addData(dataToAdd){
+				var name = dataToAdd[0].value;
+				var amt = dataToAdd[1].value;
+				if(name == null || name == "" || isNaN(amt)){
+					$("#message").html("Please enter proper Name and Amount");
+					return;
+				}
+				else if(name.length > 30 || amt.length > 11){
+					$("#message").html("Name should not be more than 30 characters and Amount 11 characters");
+					return;
+				}
 			$.ajax({
 						type:'post',
 						url:'backend.php',
