@@ -11,12 +11,13 @@
 
 	</head>
 	<body>
+		<?php require_once("navbar.php") ?>
 		<div id="holder" class="contianer-fluid">
-			<div class="row">
+			<!-- <div class="row"> 
 				<h2 class="col-md-10" id="title">Expense Tracker</h2>
 				<h3 class="col-md-2" id="username"><span id="displayName">username</span>
 					<span id="v"> &#9660;<h3>
-			</div>
+			</div>-->
 
 			<hr />
 
@@ -91,6 +92,7 @@
 			//internal link for exp,income... in show all
 			//login and signup page
 			//deletion of cred and deb
+			//add navbar.php to all pages
 			
 		$(document).ready(function(){
 			//displaying username
